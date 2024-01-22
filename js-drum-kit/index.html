@@ -66,23 +66,23 @@
             let kc = e.keyCode,
                 audio = document.querySelector(`audio[data-key="${kc}"]`),
                 key = document.querySelector(`div[data-key="${kc}"]`);
-            
+
             if (!audio) return;
             audio.currentTime = 0;
             audio.play();
 
-            // Change the look of the buttons
             key.classList.add('playing');
         }
 
-        function removeTransition(e)
-        {
-            if (e.propertyName !== 'transform') return;
-            this.classList.remove('playing')
-        }
-        let keys = document.querySelectorAll('.key');
-        keys.forEach(key => key.addEventListener('transitionend', removeTransition));
         window.addEventListener('keydown', playSound);
+        window.addEventListener('keyup', e =>
+        {
+            let kc = e.keyCode,
+                key = document.querySelector(`div[data-key="${kc}"]`);
+
+            if (!key) return;
+            key.classList.remove('playing');
+        });
     </script>
 
 

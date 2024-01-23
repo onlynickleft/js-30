@@ -18,6 +18,7 @@
 			<div id="second-hand" class="hand"></div>
 			<div class="center"></div>
 		</div>
+		<div id="output"></div>
 	</div>
 
 
@@ -70,6 +71,7 @@
 			transform: translateY(-3px);
 			transition: opacity 1s ease 0s;
 		}
+
 		#clock-face.display {
 			opacity: 1;
 		}
@@ -81,7 +83,7 @@
 			position: absolute;
 			top: calc(50% - 3px);
 			transform-origin: 100%;
-			transition: all 0.05s;
+			transition: all 0.05s cubic-bezier(0.1, 2.89, 0.58, 1) 0s;
 		}
 
 		#hour-hand {
@@ -89,13 +91,8 @@
 			width: 40%;
 		}
 
-		#min-hand {
-			transform: rotate(0deg);
-		}
-
 		#second-hand {
 			height: 3px;
-			transform: rotate(0deg);
 		}
 
 		.center {
@@ -117,9 +114,10 @@
 		let hHand = document.getElementById('hour-hand'),
 			mHand = document.getElementById('min-hand'),
 			sHand = document.getElementById('second-hand'),
+			origTransitionStyle = sHand.style.transition,
 			temp = 0;
 
-		setInterval(() => 
+		let interval = setInterval(() => 
 		{
 			let now = new Date(),
 				seconds = now.getSeconds(),
@@ -130,9 +128,21 @@
 			mHand.style.transform = `rotate(${((mins / 60) * 360) + ((seconds / 60) * 6) + 90}deg)`;
 			hHand.style.transform = `rotate(${((hours / 12) * 360) + ((mins / 60) * 30) + 90}deg)`;
 
-			// display the clock face
-			document.getElementById('clock-face').classList.add('display');
-		}, 500);
+			// remove the transition when the seconds hit 60 to avoid second hand quickly going backwards 
+			// to 90deg.
+			if (seconds === 0)
+			{
+				sHand.style.transition = 'none';
+			}
+			else if (seconds === 1)
+			{
+				sHand.style.transition = origTransitionStyle;
+			}
+
+			// display the clock face once hands are set if not already
+			if (!document.getElementById('clock-face').classList.contains('display'))
+				document.getElementById('clock-face').classList.add('display');
+		}, 1000);
 	</script>
 </body>
 

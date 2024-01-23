@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>JS + CSS Clock</title>
+	<link rel="icon" href="https://fav.farm/🔥" />
+</head>
+
+<body>
+
+
+	<div class="clock">
+		<img src="clock.svg" alt="clock bg">
+		<div id="clock-face">
+			<div id="hour-hand" class="hand"></div>
+			<div id="min-hand" class="hand"></div>
+			<div id="second-hand" class="hand"></div>
+			<div class="center"></div>
+		</div>
+	</div>
+
+
+	<style>
+		html {
+			background: #7d9ebe;
+			background-size: cover;
+			font-family: 'helvetica neue';
+			text-align: center;
+			font-size: 10px;
+		}
+
+		body {
+			margin: 0;
+			font-size: 2rem;
+			display: flex;
+			flex: 1;
+			min-height: 100vh;
+			align-items: center;
+		}
+
+		.clock {
+			position: relative;
+			width: 30rem;
+			height: 30rem;
+			border: 20px solid white;
+			border-radius: 50%;
+			margin: 50px auto;
+			position: relative;
+			padding: 2rem;
+			box-shadow:
+				0 0 0 4px rgba(0, 0, 0, 0.1),
+				0 0 10px rgba(0, 0, 0, 0.2);
+		}
+
+		img {
+			display: block;
+			left: 50%;
+			position: absolute;
+			top: 50%;
+			transform: translate(-50%, -50%);
+			width: 90%;
+		}
+
+		#clock-face {
+			opacity: 0;
+			position: relative;
+			width: 100%;
+			height: 100%;
+			transform: translateY(-3px);
+			transition: opacity 1s ease 0s;
+		}
+		#clock-face.display {
+			opacity: 1;
+		}
+
+		.hand {
+			width: 50%;
+			height: 6px;
+			background: black;
+			position: absolute;
+			top: calc(50% - 3px);
+			transform-origin: 100%;
+			transition: all 0.05s;
+		}
+
+		#hour-hand {
+			left: 10%;
+			width: 40%;
+		}
+
+		#min-hand {
+			transform: rotate(0deg);
+		}
+
+		#second-hand {
+			height: 3px;
+			transform: rotate(0deg);
+		}
+
+		.center {
+			background: #ffffff;
+			border-radius: 50%;
+			box-shadow: 0px 0px 3px 5px rgba(0, 0, 0, 0.4);
+			height: 20px;
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%, -50%);
+			width: 20px;
+			z-index: 2;
+		}
+	</style>
+
+	<script>
+
+		let hHand = document.getElementById('hour-hand'),
+			mHand = document.getElementById('min-hand'),
+			sHand = document.getElementById('second-hand'),
+			temp = 0;
+
+		setInterval(() => 
+		{
+			let now = new Date(),
+				seconds = now.getSeconds(),
+				mins = now.getMinutes(),
+				hours = now.getHours();
+
+			sHand.style.transform = `rotate(${((seconds / 60) * 360) + 90}deg)`;
+			mHand.style.transform = `rotate(${((mins / 60) * 360) + ((seconds / 60) * 6) + 90}deg)`;
+			hHand.style.transform = `rotate(${((hours / 12) * 360) + ((mins / 60) * 30) + 90}deg)`;
+
+			// display the clock face
+			document.getElementById('clock-face').classList.add('display');
+		}, 500);
+	</script>
+</body>
+
+</html>

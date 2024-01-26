@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Type Ahead 👀</title>
+	<link rel="stylesheet" href="style.css">
+	<link rel="icon" href="https://fav.farm/🔥" />
+</head>
+
+<body>
+
+	<form class="search-form">
+		<input type="text" id="search" placeholder="City or State" autocomplete="off">
+		<ul id="suggestions">
+
+		</ul>
+	</form>
+	<script>
+		const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+		let cities = [];
+
+		let prom = fetch(endpoint)
+			.then(blob => blob.json())
+			.then(data => cities.push(...data))
+
+		function findMatches(wordToMatch, cities)
+		{
+			return cities.filter(place =>
+			{
+				let re = new RegExp(wordToMatch, 'gi');
+				return place.city.match(re) || place.state.match(re);
+			});
+		}
+
+		function displayMatches(e)
+		{
+			let inputValue = e.target.value;
+			buildList(inputValue, findMatches(inputValue, cities));
+		}
+
+		function buildList(inputValue, placeArray)
+		{
+			let suggestionsUL = document.getElementById('suggestions');
+			suggestionsUL.innerHTML = '';
+
+			// More than 1 character entered 
+			if (inputValue.length > 1)
+			{
+				placeArray.forEach(placeEntry =>
+				{
+					let li = document.createElement('li'),
+						place = `${placeEntry.city}, ${placeEntry.state}`,
+						pop = `<span class="population">${parseInt(placeEntry.population).toLocaleString('en-US')}</span>`;
+
+					// Add background to highlight kw in the place (city, state or both)
+					place = `<span class="place">${place.replace(new RegExp(`(${inputValue})`, 'gi'), `<span class="hl">$1</span>`)}</span>`;
+
+					li.innerHTML = `${place} ${pop}`;
+					suggestionsUL.appendChild(li);
+				});
+			}
+		}
+
+		let search = document.getElementById('search');
+		search.addEventListener('input', displayMatches);
+	</script>
+</body>
+
+</html>

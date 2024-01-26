@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Flex Panels 💪</title>
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="https://fav.farm/🔥" />
+    <link href="assets/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div id="panels-container">
+        <div class="panel panel1">
+            <p>Hey</p>
+            <p>Let's</p>
+            <p>Dance</p>
+        </div>
+        <div class="panel panel2">
+            <p>Give</p>
+            <p>Take</p>
+            <p>Receive</p>
+        </div>
+        <div class="panel panel3">
+            <p>Experience</p>
+            <p>It</p>
+            <p>Today</p>
+        </div>
+        <div class="panel panel4">
+            <p>Give</p>
+            <p>All</p>
+            <p>You can</p>
+        </div>
+        <div class="panel panel5">
+            <p>Life</p>
+            <p>In</p>
+            <p>Motion</p>
+        </div>
+    </div>
+
+    <script>
+        // Open the panel clicked on by using event delegation
+        let panelsContainer = document.getElementById('panels-container'),
+            panels = panelsContainer.getElementsByClassName('panel');
+
+        // Close other open panels
+        function closeOpenPanels(currPanel)
+        {
+            for (let panel of panels)
+            {
+                if (panel.classList.contains('open') && currPanel !== panel)
+                {
+                    panel.classList.remove('open');
+                }
+            }
+        }
+
+        function animatePanel(e)
+        {
+            let elem = e.target;
+            elem = elem.parentNode.classList.contains('panel') ? elem.parentNode : elem;
+
+            elem.classList.toggle('open');
+            closeOpenPanels(elem);
+        }
+
+        function animateText(e)
+        {
+            let elem = e.target;
+            elem = elem.parentNode.classList.contains('panel') ? elem.parentNode : elem;
+            if (e.propertyName.indexOf('flex') !== -1)
+            {
+                elem.classList.toggle('p-toggle');
+            }
+        }
+
+        // Event delegation
+        panelsContainer.addEventListener('click', animatePanel);
+        panelsContainer.addEventListener('transitionend', animateText);
+    </script>
+</body>
+
+</html>
